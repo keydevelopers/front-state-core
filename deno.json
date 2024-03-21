@@ -1,0 +1,13 @@
+{
+  "name": "@front-work/state-core",
+  "version": "0.0.1",
+  "exports": {
+    ".": "./index.ts",
+    "core": "./state-core.ts"
+  },
+  "imports": {
+    "type": "jsr:@front-work/state-types",
+    "testing/": "https://deno.land/std@0.220.1/testing/",
+    "assert":"https://deno.land/std@0.219.1/assert/mod.ts"
+  }
+}
