@@ -5,7 +5,7 @@ import {
   createContext,
   createRegistration,
   createState,
-} from "./context.ts";
+} from "../mod/context.ts";
 
 describe("create context", () => {
   const parent: Context = {

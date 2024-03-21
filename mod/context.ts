@@ -1,4 +1,4 @@
-import { counter } from "./utils/counter.ts";
+import { counter } from "../utils/counter.ts";
 
 const states = new Set<State>();
 const registrations = new Map<number, Function>();

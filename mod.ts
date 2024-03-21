@@ -1,4 +1,4 @@
-export { default as stateCore, setContext } from "./state-core.ts";
+export { default as stateCore, setContext } from "./mod/state-core.ts";
 export {
   createCleanup,
   createContext,
@@ -12,5 +12,5 @@ export {
   removeContext,
   removeRegistration,
   removeState,
-} from "./context.ts";
-export { globalContext } from "./globalContext.ts";
+} from "./mod/context.ts";
+export { globalContext } from "./mod/globalContext.ts";

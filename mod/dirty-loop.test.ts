@@ -5,7 +5,7 @@ import {
   createState,
   globalContext,
   removeState,
-} from "./index.ts";
+} from "../mod.ts";
 import {
   assertSpyCallArgs,
   assertSpyCalls,
