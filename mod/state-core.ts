@@ -3,6 +3,11 @@ import { globalContext } from "./globalContext.ts"
 import dirtyNotifier,{ UpdateType } from './dirty-loop.ts'
 import { Listener } from "type"
 
+/**
+ * the context that should be used when registering states and listeners
+ * so if the context is removed we can remove all the registration associated with it
+ * can be set by calling @linkcode setContext
+ */
 let context = globalContext
 
 type StateCore<T> = {
@@ -13,6 +18,10 @@ type StateCore<T> = {
     cleanup: (cleanup: VoidFunction) => void
 }
 
+/**
+ * abstraction over the low level api
+ * it takes care of registering state, listeners in the current context @linkcode context and calling listeners on updates
+ */
 export default function createState<T>(): StateCore<T> {
     const state = createStateInContext(context)
 
@@ -49,6 +58,10 @@ export default function createState<T>(): StateCore<T> {
     return { watch, notify, notifyDirty, unWatch, cleanup }
 }
 
+/**
+ * sets @linkcode context to context that should be used when registering states and listeners
+ * so if the context is removed we can remove all the registration associated with it
+ */
 export function setContext(contextToSet: Context): Context {
     return context = contextToSet
 }

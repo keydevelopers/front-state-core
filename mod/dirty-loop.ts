@@ -1,6 +1,10 @@
 import { getRegistrations, State } from "./context.ts";
 
-const queue = new Map<State, Readonly<[any, any]>[]>();
+/**
+ * the update buffer where updates wait to be notified
+ * first state in first out however updates are not exactly FIFO
+ */
+const buffer = new Map<State, Readonly<[any, any]>[]>();
 const maxSleepTime = 2500;
 const minSleepTime = 75;
 const nextRun: { on: number; handle: number | null } = {
@@ -8,10 +12,14 @@ const nextRun: { on: number; handle: number | null } = {
   handle: null,
 };
 
+/**
+ * notifies on all accumulated updates
+ * then calls it self after a timed delay (setTimeout)
+ */
 function update(): void {
-  queue.forEach((updates, state) => {
+  buffer.forEach((updates, state) => {
     const registrations = getRegistrations(state);
-    queue.delete(state);
+    buffer.delete(state);
 
     for (let j = 0; j < updates.length; j++) {
       const update = updates[j];
@@ -26,7 +34,7 @@ function update(): void {
   if (nextRun.handle) {
     clearTimeout(nextRun.handle);
   }
-  if (queue.size) {
+  if (buffer.size) {
     nextRun.on = Date.now() + minSleepTime;
     nextRun.handle = setTimeout(update, minSleepTime);
   } else {
@@ -41,6 +49,10 @@ export enum UpdateType {
   oldestFirst,
 }
 
+/**
+ * adds updates to an notify buffer, the buffer gets notified between min-max sleep time
+ * @param type what to do with old updates if this is not the first update (between notification runs)
+ */
 export default function notify(
   state: State,
   value: any,
@@ -48,7 +60,7 @@ export default function notify(
   type = UpdateType.override,
 ): void {
   const updates = [value, oldValue] as const;
-  const current = queue.get(state);
+  const current = buffer.get(state);
 
   if (current && type !== UpdateType.override) {
     if (type === UpdateType.newestFirst) {
@@ -57,7 +69,7 @@ export default function notify(
       current.push(updates);
     }
   } else {
-    queue.set(state, [updates]);
+    buffer.set(state, [updates]);
   }
   const now = Date.now();
   if (nextRun.on > now + minSleepTime) {
