@@ -12,5 +12,7 @@ export {
   removeContext,
   removeRegistration,
   removeState,
+  type Context,
+  type State
 } from "./mod/context.ts";
 export { globalContext } from "./mod/globalContext.ts";
