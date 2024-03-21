@@ -2,7 +2,7 @@
   "name": "@front-work/state-core",
   "version": "0.0.1",
   "exports": {
-    ".": "./mod.ts",
+    ".": "./index.ts",
     "core": "./state-core.ts"
   },
   "imports": {
