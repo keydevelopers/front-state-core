@@ -15,4 +15,5 @@ export {
   type Context,
   type State
 } from "./mod/context.ts";
+export { default as notify, UpdateType } from './mod/dirty-loop.ts'
 export { globalContext } from "./mod/globalContext.ts";
