@@ -6,7 +6,7 @@
     "./core": "./mod/state-core.ts"
   },
   "imports": {
-    "type": "jsr:@front-work/state-types",
+    "type": "jsr:@front-work/state-types@0.0.1",
     "testing/": "https://deno.land/std@0.220.1/testing/",
     "assert":"https://deno.land/std@0.219.1/assert/mod.ts"
   }
