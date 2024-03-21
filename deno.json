@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "exports": {
     ".": "./mod.ts",
-    "./core": "./state-core.ts"
+    "./core": "./mod/state-core.ts"
   },
   "imports": {
     "type": "jsr:@front-work/state-types",
