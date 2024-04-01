@@ -2,7 +2,7 @@
   "version": "3",
   "packages": {
     "specifiers": {
-      "jsr:@front-work/state-types": "jsr:@front-work/state-types@0.0.1"
+      "jsr:@front-work/state-types@0.0.1": "jsr:@front-work/state-types@0.0.1"
     },
     "jsr": {
       "@front-work/state-types@0.0.1": {
@@ -69,7 +69,7 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@front-work/state-types"
+      "jsr:@front-work/state-types@0.0.1"
     ]
   }
 }
