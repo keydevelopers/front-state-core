@@ -1,16 +1,23 @@
 import { createRegistration, getRegistrations, createState as createStateInContext, removeRegistration, getRegistry, Context, createCleanup } from "./context.ts"
 import { globalContext } from "./globalContext.ts"
-import dirtyNotifier,{ UpdateType } from './dirty-loop.ts'
+import dirtyNotifier from './dirty-loop.ts'
+import { UpdateType } from "./update-type.ts";
 import { Listener } from "type"
 
 /**
  * the context that should be used when registering states and listeners
  * so if the context is removed we can remove all the registration associated with it
- * can be set by calling @linkcode setContext
+ * can be set by calling @link setContext
  */
 let context = globalContext
 
+/**
+ * listeners will be called when calling @link notify or @link notifyDirty
+ */
 type StateCore<T> = {
+    /**
+     * listen to updates by registering a callback
+     */
     watch: (callback: Listener<T>) => void;
     notify: (oldValue: T, newValue: T) => void;
     notifyDirty: (value: T, oldValue: T, type?: UpdateType | undefined) => void;
@@ -20,7 +27,7 @@ type StateCore<T> = {
 
 /**
  * abstraction over the low level api
- * it takes care of registering state, listeners in the current context @linkcode context and calling listeners on updates
+ * it takes care of registering state, listeners in the current context @link context and calling listeners on updates
  */
 export default function createState<T>(): StateCore<T> {
     const state = createStateInContext(context)
@@ -59,7 +66,7 @@ export default function createState<T>(): StateCore<T> {
 }
 
 /**
- * sets @linkcode context to context that should be used when registering states and listeners
+ * sets @link context to context that should be used when registering states and listeners
  * so if the context is removed we can remove all the registration associated with it
  */
 export function setContext(contextToSet: Context): Context {
