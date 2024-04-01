@@ -1,22 +1,34 @@
 import { getRegistrations, State } from "./context.ts";
+import { UpdateType } from "./update-type.ts";
 
 /**
  * the update buffer where updates wait to be notified
  * first state in first out however updates are not exactly FIFO
  */
 const buffer = new Map<State, Readonly<[any, any]>[]>();
-const maxSleepTime = 2500;
-const minSleepTime = 75;
 const nextRun: { on: number; handle: number | null } = {
   on: Infinity,
   handle: null,
 };
+/**
+ * the gap between one update run and the next
+ */
+let gap = 75;
+/**
+ * the last time update ran
+ */
+let lastRun = 0;
 
 /**
  * notifies on all accumulated updates
  * then calls it self after a timed delay (setTimeout)
  */
 function update(): void {
+  const now = Date.now();
+  lastRun = now
+  if (nextRun.on <= now) {
+    nextRun.handle = null
+  }
   buffer.forEach((updates, state) => {
     const registrations = getRegistrations(state);
     buffer.delete(state);
@@ -24,29 +36,13 @@ function update(): void {
     for (let j = 0; j < updates.length; j++) {
       const update = updates[j];
       for (let i = 0; i < registrations.length; i++) {
-        const watch = registrations[i];
-        if (watch) {
-          watch(update[0], update[1]);
+        const cb = registrations[i];
+        if (cb) {
+          cb(update[0], update[1]);
         }
       }
     }
   });
-  if (nextRun.handle) {
-    clearTimeout(nextRun.handle);
-  }
-  if (buffer.size) {
-    nextRun.on = Date.now() + minSleepTime;
-    nextRun.handle = setTimeout(update, minSleepTime);
-  } else {
-    nextRun.on = Date.now() + maxSleepTime;
-    nextRun.handle = setTimeout(update, maxSleepTime);
-  }
-}
-
-export enum UpdateType {
-  override,
-  newestFirst,
-  oldestFirst,
 }
 
 /**
@@ -72,7 +68,15 @@ export default function notify(
     buffer.set(state, [updates]);
   }
   const now = Date.now();
-  if (nextRun.on > now + minSleepTime) {
+  const next = (lastRun + gap) - now;
+
+  if (next <= 0) {
     update();
+  } else if (!nextRun.handle || nextRun.on > (now + next)) {
+    if (nextRun.handle) {
+      clearTimeout(nextRun.handle);
+    }
+    nextRun.handle = setTimeout(update, next);
+    nextRun.on = now + next;
   }
 }
