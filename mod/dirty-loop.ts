@@ -49,6 +49,8 @@ function update(): void {
 /**
  * adds updates to an notify buffer, the buffer gets notified between min-max sleep time
  * @param type what to do with old updates if this is not the first update (between notification runs)
+ * @deprecated will be modified in the next minor version
+ * the functionality will be available through `lock` and `bobble` upcoming features
  */
 export default function notify(
   state: State,
@@ -88,6 +90,8 @@ export default function notify(
  * they'll get predated
  * @param ms
  * @since 0.0.4
+ * @deprecated may be modified/removed in the next minor version
+ * the functionality will be available through `lock`s and `bobble`s
  */
 export function setUpdateGap(ms: number) {
   assert(
