@@ -1,3 +1,4 @@
+import { assert } from "assert";
 import { getRegistrations, State } from "./context.ts";
 import { UpdateType } from "./update-type.ts";
 
@@ -25,9 +26,9 @@ let lastRun = 0;
  */
 function update(): void {
   const now = Date.now();
-  lastRun = now
+  lastRun = now;
   if (nextRun.on <= now) {
-    nextRun.handle = null
+    nextRun.handle = null;
   }
   buffer.forEach((updates, state) => {
     const registrations = getRegistrations(state);
@@ -78,5 +79,28 @@ export default function notify(
     }
     nextRun.handle = setTimeout(update, next);
     nextRun.on = now + next;
+  }
+}
+
+/**
+ * set the gap between updates
+ * if updates are scheduled in the future later then gap
+ * they'll get predated
+ * @param ms
+ * @since 0.0.4
+ */
+export function setUpdateGap(ms: number) {
+  assert(
+    ms > 0 && ms <= Number.MAX_SAFE_INTEGER,
+    "number must be a positive int",
+  );
+  const prev = gap;
+  gap = ms;
+
+  if (gap < prev && nextRun.handle) {
+    const now = Date.now();
+    clearTimeout(nextRun.handle);
+    nextRun.handle = setTimeout(update, gap);
+    nextRun.on = now + gap;
   }
 }
