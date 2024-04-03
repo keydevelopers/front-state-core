@@ -1,4 +1,3 @@
-import { assert } from "assert";
 import { getRegistrations, State } from "./context.ts";
 import { UpdateType } from "./update-type.ts";
 
@@ -94,10 +93,9 @@ export default function notify(
  * the functionality will be available through `lock`s and `bobble`s
  */
 export function setUpdateGap(ms: number) {
-  assert(
-    ms > 0 && ms <= Number.MAX_SAFE_INTEGER,
-    "number must be a positive int",
-  );
+  if (!(ms > 0 && ms <= Number.MAX_SAFE_INTEGER)) {
+    throw new TypeError('number must be a positive int')
+  }
   const prev = gap;
   gap = ms;
 
