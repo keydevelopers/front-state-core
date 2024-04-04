@@ -94,7 +94,7 @@ export default function notify(
  */
 export function setUpdateGap(ms: number) {
   if (!(ms > 0 && ms <= Number.MAX_SAFE_INTEGER)) {
-    throw new TypeError('number must be a positive int')
+    throw new TypeError("number must be a positive int");
   }
   const prev = gap;
   gap = ms;

@@ -1,9 +1,10 @@
 import { describe, it } from "testing/bdd.ts";
-import stateCore, { setContext } from "./state-core.ts";
+import stateCore from "./state-core.ts";
+import { setContext } from "./current-context.ts";
 import { createContext, getRegistry } from "./context.ts";
 import { assertSpyCallArgs, assertSpyCalls, spy } from "testing/mock.ts";
 import { assert, assertEquals } from "assert";
-import { globalContext } from "./globalContext.ts";
+import { globalContext } from "./current-context.ts";
 
 describe("state core", { sanitizeOps: false, sanitizeResources: false }, () => {
   const initialStates = new Set(globalContext.states);
@@ -79,19 +80,6 @@ describe("state core", { sanitizeOps: false, sanitizeResources: false }, () => {
     assert(typeof id === "number");
     assert(globalContext.cleanup.has(id));
     assert(state.cleanup.has(id));
-  });
-});
-
-describe("set context", () => {
-  it("sets the context to context", () => {
-    const context = setContext(createContext(globalContext));
-    assertEquals(context, {
-      cleanup: new Set(),
-      contexts: new Set(),
-      controller: new AbortController(),
-      registrations: new Set(),
-      states: new Set(),
-    });
   });
   it("uses context to register listeners", () => {
     const context = setContext(createContext(globalContext));

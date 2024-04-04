@@ -1,51 +1,56 @@
 # front-state-core
-extensible core state/state-context functionality for performant state keeping for the front-work framework
 
-the library is not meant to be used independently rather as a lower level library to wrapped within custom functionality wrappers
+extensible core state/state-context functionality for performant state keeping
+for the front-work framework
+
+the library is not meant to be used independently rather as a lower level
+library to wrapped within custom functionality wrappers
 
 ## examples
 
 ### managing state contexts
+
 ```typescript
 import state from "@front-work/state-utils";
 import stateCore, {
-  setContext,
   createContext,
+  globalContext,
   removeContext,
-  globalContext
+  setContext,
 } from "@front-work/state-core";
 
 function meetingScopedStates(user: User) {
   const context = setContext(createContext(globalContext));
 
-  const participants = state<User[]>()
-  const chat = participants.to(list => list.map(user => user.chat))
+  const participants = state<User[]>();
+  const chat = participants.to((list) => list.map((user) => user.chat));
 
-  setContext(globalContext)
+  setContext(globalContext);
 
-  function endMeeting(){
-    removeContext(context)
+  function endMeeting() {
+    removeContext(context);
   }
 
-  function addParticipant(user: User){
-    participants.value = [...participants.value, user]
+  function addParticipant(user: User) {
+    participants.value = [...participants.value, user];
   }
-  function removeParticipant(user: User){
-    participants.value = participants.filter(({id}) => user.id !== id )
+  function removeParticipant(user: User) {
+    participants.value = participants.filter(({ id }) => user.id !== id);
   }
 
   return {
     chats,
     addParticipant,
     removeParticipant,
-    endMeeting
-  }
+    endMeeting,
+  };
 }
 ```
 
 ### managing un/registration, updates using stateCore
+
 ```typescript
-import {IMut} from "@front-work/state-types";
+import { IMut } from "@front-work/state-types";
 import stateCore from "@front-work/state-core";
 
 function countMinutes(): IState<number> {
@@ -54,7 +59,7 @@ function countMinutes(): IState<number> {
   let value = 0;
 
   setState(() => {
-    notify(value++, value)
+    notify(value++, value);
   }, 1000);
 
   return {
@@ -62,7 +67,7 @@ function countMinutes(): IState<number> {
     unWatch,
     get value() {
       return value;
-    }
-  }
+    },
+  };
 }
 ```

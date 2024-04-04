@@ -36,14 +36,14 @@ describe("dirty loop state update manger", () => {
       notify(state, update[0], update[1], UpdateType.override);
     });
     await new Promise((resolve) => setTimeout(resolve, 80));
-  
+
     // expected to skip one update
     assertSpyCalls(callback, 1);
     assertSpyCallArgs(callback, 0, updates[1]);
-  
+
     removeState(state);
   });
-  
+
   it("keeps update order", async () => {
     const state = createState(globalContext);
     const callback = spy();
@@ -64,7 +64,7 @@ describe("dirty loop state update manger", () => {
     });
     removeState(state);
   });
-  
+
   it("inverts update order", async () => {
     const state = createState(globalContext);
     const callback = spy();
@@ -74,22 +74,21 @@ describe("dirty loop state update manger", () => {
       [0, 1],
       [1, 2],
     ];
-  
-  
+
     updates.forEach((update) => {
       notify(state, update[0], update[1], UpdateType.newestFirst);
     });
-  
+
     await new Promise((resolve) => setTimeout(resolve, 200));
-  
+
     assertSpyCalls(callback, 2);
-  
+
     updates.toReversed().map((update, index) => {
       assertSpyCallArgs(callback, index, update);
     });
     removeState(state);
   });
-  
+
   it("doesn't update twice", async () => {
     const state = createState(globalContext);
     const callback = spy();
@@ -99,29 +98,28 @@ describe("dirty loop state update manger", () => {
       [0, 1],
       [1, 2],
     ];
-  
+
     for (let i = 0; i < updates.length; i++) {
       const update = updates[i];
       notify(state, update[0], update[1], UpdateType.override);
       await new Promise((res) => setTimeout(res, 200));
     }
-  
+
     assertSpyCalls(callback, 2);
     updates.forEach((update, i) => {
       assertSpyCallArgs(callback, i, update);
     });
-  
+
     await new Promise((res) => setTimeout(res, 500));
-  
+
     assertSpyCalls(callback, 2);
     updates.forEach((update, i) => {
       assertSpyCallArgs(callback, i, update);
     });
-  
+
     removeState(state);
   });
-})
-
+});
 
 describe.skip("set gap", () => {
-})
+});

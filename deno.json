@@ -1,13 +1,14 @@
 {
   "name": "@front-work/state-core",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "exports": {
     ".": "./mod.ts",
-    "./core": "./mod/state-core.ts"
+    "./core": "./mod/state-core.ts",
+    "./current-context": "./mod/current-context.ts"
   },
   "imports": {
     "type": "jsr:@front-work/state-types@0.0.1",
     "testing/": "https://deno.land/std@0.220.1/testing/",
-    "assert":"https://deno.land/std@0.219.1/assert/mod.ts"
+    "assert": "https://deno.land/std@0.219.1/assert/mod.ts"
   }
 }
